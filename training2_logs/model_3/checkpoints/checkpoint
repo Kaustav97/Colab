@@ -1,0 +1,6 @@
+model_checkpoint_path: "model_3_epoch_83.ckpt"
+all_model_checkpoint_paths: "model_3_epoch_79.ckpt"
+all_model_checkpoint_paths: "model_3_epoch_80.ckpt"
+all_model_checkpoint_paths: "model_3_epoch_81.ckpt"
+all_model_checkpoint_paths: "model_3_epoch_82.ckpt"
+all_model_checkpoint_paths: "model_3_epoch_83.ckpt"
