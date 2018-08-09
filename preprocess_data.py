@@ -105,8 +105,8 @@ train_gt_dir="newlabels2/"
 val_imgs_dir = "val_images/"
 val_gt_dir = "val_labels/"
 
-train_dirs = ["KITTI"]
-val_dirs = ["KITTI"]
+train_dirs = ["KITTI/"]
+val_dirs = ["KITTI/"]
 
 # get the path to all training images and their corresponding label image:
 train_img_paths = []
@@ -120,7 +120,8 @@ for dir_step, dir in enumerate(train_dirs):
             print ("train dir %d/%d, step %d/%d" % (dir_step, len(train_dirs)-1,
                         step, len(file_names)-1))
 
-        img_id = file_name.split("_left")[0]
+        img_id,num = file_name.split('_')
+        img_id=img_id+"_lane_"+num
 
         # read the image:
         img_path = img_dir + file_name
@@ -130,15 +131,16 @@ for dir_step, dir in enumerate(train_dirs):
         # the corresponding label image which we reisize below) and save to
         # project_dir/data:
         img_small = cv2.resize(img, (new_img_width, new_img_height),
-                    interpolation=cv2.INTER_NEAREST)
-        img_small_path = project_dir + "data/" + img_id + ".png"
+                    interpolation=cv2.INTER_NEAREST )
+        img_small_path = project_dir + "data/" + img_id
         cv2.imwrite(img_small_path, img_small)
         train_img_paths.append(img_small_path)
 
         # read and resize the corresponding label image without interpolation
         # (want the resulting image to still only contain pixel values
         # corresponding to an object class):
-        gt_img_path = train_gt_dir + dir + img_id + "_gtFine_labelIds.png"
+        gt_img_path = train_gt_dir + dir + img_id
+        # print gt_img_path
         gt_img = cv2.imread(gt_img_path, -1)
         gt_img_small = cv2.resize(gt_img, (new_img_width, new_img_height),
                         interpolation=cv2.INTER_NEAREST)
@@ -148,7 +150,7 @@ for dir_step, dir in enumerate(train_dirs):
         trainId_label = id_to_trainId_map_func(id_label)
 
         # save the label image to project_dir/data:
-        trainId_label_path = project_dir + "data/" + img_id + "_trainId_label.png"
+        trainId_label_path = project_dir + "data/" + img_id
         cv2.imwrite(trainId_label_path, trainId_label)
         train_trainId_label_paths.append(trainId_label_path)
 
@@ -157,6 +159,7 @@ for dir_step, dir in enumerate(train_dirs):
 print "computing mean color channels of the train imgs"
 no_of_train_imgs = len(train_img_paths)
 mean_channels = np.zeros((3, ))
+
 for step, img_path in enumerate(train_img_paths):
     if step % 100 == 0:
         print step

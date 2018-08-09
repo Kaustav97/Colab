@@ -1,17 +1,18 @@
 import tensorflow as tf
 import os
 import cPickle
-
 from utilities import PReLU, spatial_dropout, max_unpool
+from tensorflow import data
+from tensorflow.contrib import tensorboard
 
 class ENet_model(object):
 
-    def __init__(self, model_id, img_height=512, img_width=1024, batch_size=4):
+    def __init__(self, model_id, img_height=360, img_width=1200, batch_size=4):
         self.model_id = model_id
 
-        self.project_dir = "/root/segmentation/"
+        # self.project_dir = "/root/segmentation/"
 
-        self.logs_dir = self.project_dir + "training_logs/"
+        self.logs_dir = 'training2_logs/'
         if not os.path.exists(self.logs_dir):
             os.makedirs(self.logs_dir)
 
@@ -19,8 +20,9 @@ class ENet_model(object):
         self.img_height = img_height
         self.img_width = img_width
 
-        self.no_of_classes = 20
-        self.class_weights = cPickle.load(open("data/class_weights.pkl"))
+        self.no_of_classes = 1
+        # self.class_weights = cPickle.load(open("data/class_weights.pkl"))
+        self.class_weights=[1]
 
         self.wd = 2e-4 # (weight decay)
         self.lr = 5e-4 # (learning rate)
@@ -50,6 +52,7 @@ class ENet_model(object):
             os.makedirs(self.debug_imgs_dir)
 
     def add_placeholders(self):
+
         self.imgs_ph = tf.placeholder(tf.float32,
                     shape=[self.batch_size, self.img_height, self.img_width, 3],
                     name="imgs_ph")
@@ -64,25 +67,30 @@ class ENet_model(object):
         # dropout probability in the later layers of the network:
         self.late_drop_prob_ph = tf.placeholder(tf.float32, name="late_drop_prob_ph")
 
+        # self.dataset=tf.data.Dataset.from_tensors((self.imgs_ph,self.early_drop_prob_ph,self.late_drop_prob_ph,self.onehot_labels_ph))
+        # self.iter=self.dataset.make_initializable_iterator()
+
     def create_feed_dict(self, imgs_batch, early_drop_prob, late_drop_prob, onehot_labels_batch=None):
         # return a feed_dict mapping the placeholders to the actual input data:
+
         feed_dict = {}
         feed_dict[self.imgs_ph] = imgs_batch
         feed_dict[self.early_drop_prob_ph] = early_drop_prob
         feed_dict[self.late_drop_prob_ph] = late_drop_prob
+
         if onehot_labels_batch is not None:
-            # only add the labels data if it's specified (during inference, we
-            # won't have any labels):
+        # only add the labels data if it's specified (during inference, we
+        # won't have any labels):
             feed_dict[self.onehot_labels_ph] = onehot_labels_batch
 
         return feed_dict
+
 
     def add_logits(self):
         # encoder:
         # # initial block:
         network = self.initial_block(x=self.imgs_ph, scope="inital")
         print network.get_shape().as_list()
-
 
         # # layer 1:
         # # # save the input shape to use in max_unpool in the decoder:
@@ -219,11 +227,14 @@ class ENet_model(object):
                     scope="bottleneck_5_1")
         print network.get_shape().as_list()
 
-
-
         # fullconv:
         network = tf.contrib.slim.conv2d_transpose(network, self.no_of_classes,
-                    [2, 2], stride=2, scope="fullconv", padding="SAME")
+                            [2,2],stride=2, scope="fullconv", padding="SAME")
+
+        # network = self.decoder_bottleneck(x=network, output_depth=16,
+        #             scope="bottleneck_5_0", upsampling=True,
+        #             pooling_indices=pooling_indices_1, output_shape=self.no_of_classes)
+        
         print network.get_shape().as_list()
 
         self.logits = network
@@ -234,9 +245,14 @@ class ENet_model(object):
         weights = tf.reduce_sum(weights, 3)
 
         # compute the weighted cross-entropy segmentation loss for each pixel:
-        seg_loss_per_pixel = tf.losses.softmax_cross_entropy(
-                    onehot_labels=self.onehot_labels_ph, logits=self.logits,
-                    weights=weights)
+
+        # seg_loss_per_pixel = tf.losses.softmax_cross_entropy(
+        #             onehot_labels=self.onehot_labels_ph, logits=self.logits,
+        #             weights=weights)
+
+        seg_loss_per_pixel=tf.nn.softmax_cross_entropy_with_logits(
+            labels=self.onehot_labels_ph,logits=self.logits)
+        # seg_loss_per_pixel=tf.mul(seg_loss_per_pixel,weights)
 
         # average the loss over all pixels to get the batch segmentation loss:
         self.seg_loss = tf.reduce_mean(seg_loss_per_pixel)
@@ -269,7 +285,7 @@ class ENet_model(object):
                     strides=[1, 2, 2, 1], padding="VALID")
 
         # concatenate the branches:
-        concat = tf.concat([conv_branch, pool_branch], axis=3) # (3: the depth axis)
+        concat = tf.concat(values=[conv_branch, pool_branch], axis=3) # (3: the depth axis)
 
         # apply batch normalization and PReLU:
         output = tf.contrib.slim.batch_norm(concat)
@@ -277,8 +293,7 @@ class ENet_model(object):
 
         return output
 
-    def encoder_bottleneck_regular(self, x, output_depth, drop_prob, scope,
-                proj_ratio=4, downsampling=False):
+    def encoder_bottleneck_regular(self, x, output_depth, drop_prob, scope,proj_ratio=4, downsampling=False):
         input_shape = x.get_shape().as_list()
         input_depth = input_shape[3]
 
@@ -366,8 +381,7 @@ class ENet_model(object):
         else:
             return output
 
-    def encoder_bottleneck_dilated(self, x, output_depth, drop_prob, scope,
-                dilation_rate, proj_ratio=4):
+    def encoder_bottleneck_dilated(self, x, output_depth, drop_prob, scope,dilation_rate, proj_ratio=4):
         input_shape = x.get_shape().as_list()
         input_depth = input_shape[3]
 
@@ -497,8 +511,7 @@ class ENet_model(object):
 
         return output
 
-    def decoder_bottleneck(self, x, output_depth, scope, proj_ratio=4,
-                upsampling=False, pooling_indices=None, output_shape=None):
+    def decoder_bottleneck(self, x, output_depth, scope, proj_ratio=4,upsampling=False, pooling_indices=None, output_shape=None):
         # NOTE! decoder uses ReLU instead of PReLU
 
         input_shape = x.get_shape().as_list()
@@ -525,7 +538,6 @@ class ENet_model(object):
             main_branch = max_unpool(main_branch, pooling_indices, output_shape)
 
         main_branch = tf.cast(main_branch, tf.float32)
-
 
         # convolution branch:
         conv_branch = x
@@ -583,7 +595,6 @@ class ENet_model(object):
 
         # NOTE! no regularizer
 
-
         # add the branches:
         merged = conv_branch + main_branch
 
@@ -592,8 +603,7 @@ class ENet_model(object):
 
         return output
 
-    def get_variable_weight_decay(self, name, shape, initializer, loss_category,
-                dtype=tf.float32):
+    def get_variable_weight_decay(self, name, shape, initializer, loss_category,dtype=tf.float32):
         variable = tf.get_variable(name, shape=shape, dtype=dtype,
                     initializer=initializer)
 
@@ -602,3 +612,4 @@ class ENet_model(object):
         tf.add_to_collection(loss_category, weight_decay)
 
         return variable
+

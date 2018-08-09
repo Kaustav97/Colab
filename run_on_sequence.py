@@ -8,15 +8,15 @@ from utilities import label_img_to_color
 
 from model import ENet_model
 
-project_dir = "/root/segmentation/"
+project_dir = ""
 
 data_dir = project_dir + "data/"
 
 model_id = "sequence_run"
 
-batch_size = 4
-img_height = 512
-img_width = 1024
+batch_size = 6
+img_height = 360
+img_width = 1200
 
 model = ENet_model(model_id, img_height=img_height, img_width=img_width,
             batch_size=batch_size)
@@ -27,7 +27,7 @@ no_of_classes = model.no_of_classes
 train_mean_channels = cPickle.load(open("data/mean_channels.pkl"))
 
 # load the sequence data:
-seq_frames_dir = "/root/data/cityscapes/leftImg8bit/demoVideo/stuttgart_02/"
+seq_frames_dir = "seq"
 seq_frame_paths = []
 frame_names = sorted(os.listdir(seq_frames_dir))
 for step, frame_name in enumerate(frame_names):
@@ -53,7 +53,7 @@ with tf.Session() as sess:
     sess.run(init)
 
     # restore the best trained model:
-    saver.restore(sess, project_dir + "training_logs/best_model/model_1_epoch_23.ckpt")
+    saver.restore(sess, project_dir + "training2_logs/model3/checkpoints/model_3_epoch_83.ckpt")
 
     batch_pointer = 0
     for step in range(no_of_batches):
