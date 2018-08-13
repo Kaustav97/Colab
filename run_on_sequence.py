@@ -28,7 +28,7 @@ no_of_classes = model.no_of_classes
 train_mean_channels=[19.,19.,19]
 
 # load the sequence data:
-seq_frames_dir = "seq"
+seq_frames_dir = "Colab/seq"
 seq_frame_paths = []
 frame_names = sorted(os.listdir(seq_frames_dir))
 for step, frame_name in enumerate(frame_names):
