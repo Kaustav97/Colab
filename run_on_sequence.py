@@ -43,7 +43,7 @@ no_of_frames = len(seq_frame_paths)
 no_of_batches = int(no_of_frames/batch_size)
 
 # define where to place the resulting images:
-results_dir ="results_on_seq/"
+results_dir =project_dir+"results_on_seq/"
 
 # create a saver for restoring variables/parameters:
 saver = tf.train.Saver(tf.trainable_variables(), write_version=tf.train.SaverDef.V2)
@@ -66,6 +66,7 @@ with tf.Session() as sess:
             img_paths.append(img_path)
 
             # read the image:
+            print "OPENING IMAGE:{}".format(img_path)
             img = cv2.imread(img_path, -1)
             img = cv2.resize(img, (img_width, img_height))
             img = img - train_mean_channels

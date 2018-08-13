@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="96a3f39d-42b0-4d8d-b1a3-978c9987bf14" name="Default" comment="" />
+    <list default="true" id="96a3f39d-42b0-4d8d-b1a3-978c9987bf14" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/run_on_sequence.py" afterPath="$PROJECT_DIR$/run_on_sequence.py" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -27,8 +29,8 @@
       <file leaf-file-name="run_on_sequence.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/run_on_sequence.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="523">
-              <caret line="77" column="0" lean-forward="true" selection-start-line="77" selection-start-column="0" selection-end-line="77" selection-end-column="0" />
+            <state relative-caret-position="333">
+              <caret line="68" column="53" lean-forward="true" selection-start-line="68" selection-start-column="53" selection-end-line="68" selection-end-column="53" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -74,6 +76,7 @@
       <find>mean_chann</find>
       <find>project_</find>
       <find>train_mean_ch</find>
+      <find>seq_fra</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -411,8 +414,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/run_on_sequence.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="523">
-          <caret line="77" column="0" lean-forward="true" selection-start-line="77" selection-start-column="0" selection-end-line="77" selection-end-column="0" />
+        <state relative-caret-position="333">
+          <caret line="68" column="53" lean-forward="true" selection-start-line="68" selection-start-column="53" selection-end-line="68" selection-end-column="53" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
