@@ -6,7 +6,7 @@ import tensorflow as tf
 from collections import namedtuple
 import random
 
-project_dir = ""
+project_dir = "Colab/"
 data_dir = ""
 
 # (NOTE! this is taken from the official Cityscapes scripts:)
@@ -99,11 +99,12 @@ cityscapes_dir = data_dir + "cityscapes/"
 #train_imgs_dir = cityscapes_dir + "leftImg8bit/train/"
 #train_gt_dir = cityscapes_dir + "gtFine/train/"
 
-train_imgs_dir="images/"
-train_gt_dir="newlabels2/"
 
-val_imgs_dir = "val_images/"
-val_gt_dir = "val_labels/"
+train_imgs_dir= project_dir+"images/"
+train_gt_dir=project_dir+"newlabels2/"
+
+val_imgs_dir = project_dir+"val_images/"
+val_gt_dir = project_dir+"val_labels/"
 
 train_dirs = ["KITTI/"]
 val_dirs = ["KITTI/"]
