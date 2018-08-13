@@ -54,7 +54,7 @@ with tf.Session() as sess:
     sess.run(init)
 
     # restore the best trained model:
-    saver.restore(sess, project_dir + "training2_logs/model3/checkpoints/model_3_epoch_83.ckpt")
+    saver.restore(sess, project_dir + "training2_logs/model_3/checkpoints/model_3_epoch_83.ckpt")
 
     batch_pointer = 0
     for step in range(no_of_batches):
