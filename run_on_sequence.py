@@ -24,7 +24,8 @@ model = ENet_model(model_id, img_height=img_height, img_width=img_width,
 no_of_classes = model.no_of_classes
 
 # load the mean color channels of the train imgs:
-train_mean_channels = cPickle.load(open("data/mean_channels.pkl"))
+# train_mean_channels = cPickle.load(open("data/mean_channels.pkl"))
+train_mean_channels=[19.,19.,19]
 
 # load the sequence data:
 seq_frames_dir = "seq"
@@ -42,7 +43,7 @@ no_of_frames = len(seq_frame_paths)
 no_of_batches = int(no_of_frames/batch_size)
 
 # define where to place the resulting images:
-results_dir = model.project_dir + "results_on_seq/"
+results_dir ="results_on_seq/"
 
 # create a saver for restoring variables/parameters:
 saver = tf.train.Saver(tf.trainable_variables(), write_version=tf.train.SaverDef.V2)
