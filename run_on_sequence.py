@@ -8,7 +8,7 @@ from utilities import label_img_to_color
 
 from model import ENet_model
 
-project_dir = ""
+project_dir = "Colab/"
 
 data_dir = project_dir + "data/"
 
