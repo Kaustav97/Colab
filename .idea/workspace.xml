@@ -29,8 +29,8 @@
       <file leaf-file-name="run_on_sequence.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/run_on_sequence.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="126">
-              <caret line="31" column="0" lean-forward="false" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
+            <state relative-caret-position="433">
+              <caret line="110" column="28" lean-forward="true" selection-start-line="110" selection-start-column="28" selection-end-line="110" selection-end-column="28" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -77,6 +77,7 @@
       <find>project_</find>
       <find>train_mean_ch</find>
       <find>seq_fra</find>
+      <find>results_dir</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -414,8 +415,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/run_on_sequence.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="31" column="0" lean-forward="false" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
+        <state relative-caret-position="433">
+          <caret line="110" column="28" lean-forward="true" selection-start-line="110" selection-start-column="28" selection-end-line="110" selection-end-column="28" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>

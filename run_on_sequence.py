@@ -99,9 +99,9 @@ with tf.Session() as sess:
             cv2.imwrite(pred_path, overlayed_img)
 
 # create a video of all the resulting overlayed images:
-fourcc = cv2.cv.CV_FOURCC("M", "J", "P", "G")
-out = cv2.VideoWriter(results_dir + "cityscapes_stuttgart_02_pred.avi", fourcc,
-            20.0, (img_width, img_height))
+# fourcc = cv2.cv.CV_FOURCC("M", "J", "P", "G")
+# out = cv2.VideoWriter(results_dir + "cityscapes_stuttgart_02_pred.avi", fourcc,
+#             20.0, (img_width, img_height))
 
 frame_names = sorted(os.listdir(results_dir))
 for step, frame_name in enumerate(frame_names):
